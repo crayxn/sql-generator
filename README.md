@@ -4,12 +4,41 @@
 ## 基础使用
 ```go
 // 基础查询
-sql, params := NewSql(func(q *Query) {
-    q.Where("id", "=", 1).Find()
-    }, "table_name")
-}
-// 输出
 // select * from table_name where id = ? limit 1 offset 0
+sql, params := NewSql(func(q *Query) {
+    q.Where("id", "=", 1)
+	q.Find()
+}, "table_name")
+
+// 更新
+// update table_name set status=? where id = ?
+sql, params := NewSql(func(q *Query) {
+    q.Where("id", "=", 1)
+    q.Update(map[string]interface{}{
+        "status": 2,
+    })
+}, "table_name")
+
+// 新增
+// insert into table_name (status, title) values (?, ?)
+sql, params := NewSql(func(q *Query) {
+    q.Insert(map[string]interface{}{
+        "status": 2,
+        "title":  "test",
+    })
+}, "table_name")
+
+//删除
+//delete from table_name where id = ?
+sql, params := NewSql(func(q *Query) {
+    q.Where("id", "=", 1)
+    q.Delete()
+}, "table_name")
+
+//支持链式
+sql, params := NewSql(func(q *Query) {
+    q.Where("id", "=", 1).Where("status", ">", 1).Find()
+}, "table_name")
 ```
 ## 条件查询
 支持基本的 =、<、>、like、in、between、or、is null、is not null

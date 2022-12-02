@@ -10,7 +10,8 @@ import (
 func TestQuery_ToSql(t *testing.T) {
 	t.Run("test-normal-sql", func(t *testing.T) {
 		sql, params := NewSql(func(q *Query) {
-			q.Where("id", "=", 1).Find()
+			q.Where("id", "=", 1)
+			q.Delete()
 		}, "table_name")
 		if !reflect.DeepEqual(sql, "select * from table_name where id = ? limit 1 offset 0 ") {
 			t.Errorf("fail sql = %v", sql)

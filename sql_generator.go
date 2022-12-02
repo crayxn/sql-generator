@@ -72,7 +72,7 @@ func (q *Query) Select(fields string) *Query {
 }
 
 func (q *Query) Insert(v map[string]interface{}) *Query {
-	q.typ = TypeUpdate
+	q.typ = TypeInsert
 	for key, value := range v {
 		q.insert.fields = append(q.insert.fields, key)
 		q.insert.values = append(q.insert.values, value)
@@ -188,10 +188,20 @@ func (q *Query) ToSql() (sql string, values []interface{}) {
 			sql = fmt.Sprintf("delete from %s ", q.table)
 		}
 	case TypeUpdate:
+		if len(q.update.fields) < 1 {
+			return
+		}
 		sql = fmt.Sprintf("update %s set %s ", q.table, strings.Join(q.update.fields, ", "))
 		values = q.update.values
 	case TypeInsert:
-		sql = fmt.Sprintf("insert into %s (%s) ", q.table, strings.Join(q.insert.fields, ", "))
+		temp, insLen := "?", len(q.insert.fields)
+		if insLen < 1 {
+			return
+		}
+		for i := 1; i < insLen; i++ {
+			temp += ", ?"
+		}
+		sql = fmt.Sprintf("insert into %s (%s) values (%s)", q.table, strings.Join(q.insert.fields, ", "), temp)
 		values = q.insert.values
 		return
 	default:
@@ -234,7 +244,7 @@ func (q *Query) ToSql() (sql string, values []interface{}) {
 		values = append(values, q.having.Values...)
 	}
 	//limit
-	if q.limit > 0 {
+	if q.limit > 0 && q.typ == TypeSelect {
 		sql += fmt.Sprintf("limit %d offset %d ", q.limit, q.offset)
 	}
 
