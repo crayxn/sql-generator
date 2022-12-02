@@ -60,8 +60,8 @@ q.WhereIn("status", []interface{}{1, 2, 3}) //In
 q.WhereBetween("status", 1, 3)              // between
 // status between (?,?)
 q.WhereOr(func(or *where.Wheres) {
-or.Where("id","=",1)
-or.WhereIn("status", []interface{}{ 1, 3 })
+    or.Where("id","=",1)
+    or.WhereIn("status", []interface{}{ 1, 3 })
 })
 // (id = ? or status in (?,?))
 ```
