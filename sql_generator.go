@@ -2,8 +2,8 @@ package sql_generator
 
 import (
 	"fmt"
-	"sql-generator/join"
-	"sql-generator/where"
+	"github.com/crayoon/sql_generator/join"
+	"github.com/crayoon/sql_generator/where"
 	"strings"
 	"time"
 )

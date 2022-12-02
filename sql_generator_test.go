@@ -1,9 +1,9 @@
 package sql_generator
 
 import (
+	"github.com/crayoon/sql_generator/join"
+	"github.com/crayoon/sql_generator/where"
 	"reflect"
-	"sql-generator/join"
-	"sql-generator/where"
 	"testing"
 )
 

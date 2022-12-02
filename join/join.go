@@ -2,7 +2,7 @@ package join
 
 import (
 	"fmt"
-	"sql-generator/where"
+	"github.com/crayoon/sql_generator/where"
 )
 
 const (
