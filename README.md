@@ -5,14 +5,14 @@
 ```go
 // 基础查询
 // select * from table_name where id = ? limit 1 offset 0
-sql, params := NewSql(func(q *Query) {
+sql, vars := NewSql(func(q *Query) {
     q.Where("id", "=", 1)
 	q.Find()
 }, "table_name")
 
 // 更新
 // update table_name set status=? where id = ?
-sql, params := NewSql(func(q *Query) {
+sql, vars := NewSql(func(q *Query) {
     q.Where("id", "=", 1)
     q.Update(map[string]interface{}{
         "status": 2,
@@ -21,7 +21,7 @@ sql, params := NewSql(func(q *Query) {
 
 // 新增
 // insert into table_name (status, title) values (?, ?)
-sql, params := NewSql(func(q *Query) {
+sql, vars := NewSql(func(q *Query) {
     q.Insert(map[string]interface{}{
         "status": 2,
         "title":  "test",
@@ -30,13 +30,13 @@ sql, params := NewSql(func(q *Query) {
 
 //删除
 //delete from table_name where id = ?
-sql, params := NewSql(func(q *Query) {
+sql, vars := NewSql(func(q *Query) {
     q.Where("id", "=", 1)
     q.Delete()
 }, "table_name")
 
 //支持链式
-sql, params := NewSql(func(q *Query) {
+sql, vars := NewSql(func(q *Query) {
     q.Where("id", "=", 1).Where("status", ">", 1).Find()
 }, "table_name")
 ```
@@ -68,7 +68,7 @@ or.WhereIn("status", []interface{}{ 1, 3 })
 ## Limit
 #### func (q *Query) Limit(offset int64, limit int64) *Query
 ```go 
-sql, params := NewSql(func(q *Query) {
+sql, vars := NewSql(func(q *Query) {
     q.Limit(0, 10)	
     // select * from table_name limit 10 offest 0
 }, "table_name")
@@ -76,7 +76,7 @@ sql, params := NewSql(func(q *Query) {
 ## OrderBy
 #### func (q *Query) OrderBy(field string, direction string) *Query
 ```go
-sql, params := NewSql(func(q *Query) {
+sql, vars := NewSql(func(q *Query) {
     q.OrderBy("id", "desc") 
     //select * from table_name order by id desc
     q.OrderBy("status", "asc") 
@@ -87,7 +87,7 @@ sql, params := NewSql(func(q *Query) {
 #### func (q *Query) GroupBy(field string) *Query
 #### func (q *Query) Having(do func(having *where.Wheres)) *Query
 ```go
-sql, params := NewSql(func(q *Query) {
+sql, vars := NewSql(func(q *Query) {
     q.GroupBy("status").Having(func(having *where.Wheres) {
         having.Where("count(id)", ">", 5)
     })
@@ -97,7 +97,7 @@ sql, params := NewSql(func(q *Query) {
 ## Join
 #### func (q *Query) Join(item *join.Joins, do func(join *join.Joins)) *Query
 ```go
-sql, params := NewSql(func(q *Query) {
+sql, vars := NewSql(func(q *Query) {
     q.Join(&join.Joins{
         Typ:   join.InnerJoin,
         Table: "table_name2 as t2",
