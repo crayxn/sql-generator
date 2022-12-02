@@ -1,3 +1,3 @@
-module github.com/crayoon/sql-generator
+module github.com/crayoon/sql_generator
 
 go 1.18
