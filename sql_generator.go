@@ -173,6 +173,11 @@ func (q *Query) Join(item *join.Joins, do func(join *join.Joins)) *Query {
 	return q
 }
 
+func (q *Query) Count(field string) *Query {
+	q.Select(fmt.Sprintf("count(%s) as _COUNT", field))
+	return q
+}
+
 func (q *Query) ToSql() (sql string, values []interface{}) {
 	//type
 	switch q.typ {
